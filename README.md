@@ -1,6 +1,11 @@
 # docker-gitit
 
-A Dockerfile for the [Gitit Wiki](https://github.com/jgm/gitit) including `graphviz` package for dot file support and `texlive` for PDF exporti capabilities. There is no default user, you can register directly in the wiki.
+A Dockerfile for the [Gitit Wiki](https://github.com/jgm/gitit) including:
+*   `ghc` for haskell plugin support
+*   `graphviz` package for dot file support
+*   `texlive` for PDF export capabilities
+
+There is no default user, you can register directly in the wiki.
 
 ## Usage
 
