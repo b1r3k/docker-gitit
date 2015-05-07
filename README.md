@@ -11,7 +11,7 @@ sudo docker run -d --name gitit \
                 -e GIT_COMMITTER_NAME="User Name" \
                 -e GIT_COMMITTER_EMAIL="user@domain.com" \
                 -p 80:5001 \
-                marcelhuberfoo/gitit
+                marcelhuberfoo/docker-gitit
 ```
 
 ***It is important to pass in the committers name and email at least for the first commits of gitit!*** Otherwise the container will abort due to `git commit` errors. As soon as you created a user and logged in, the commit author is the user name.
@@ -26,7 +26,7 @@ sudo docker run -d --name gitit \
                 -e GIT_COMMITTER_EMAIL="user@domain.com" \
                 -p 80:5001 \
                 -v /home/gitit/wiki:/data \
-                marcelhuberfoo/gitit
+                marcelhuberfoo/docker-gitit
 ```
 
 Instead of passing in the committer and user name as environment variables, set it in your `.git/config` administrative file from within the mounted directory. E.g. `git --git-dir=/home/gitit/wiki/wikidata/.git config user.name "Some User"` and `git --git-dir=/home/gitit/wiki/wikidata/.git config user.email "user@domain.com"` respectively. You can do it likewise for the author.
