@@ -1,6 +1,6 @@
 ## Dockerfile for gitit
-FROM debian:wheezy
-MAINTAINER Hyzual "hyzual@gmail.com"
+FROM debian:jessie
+MAINTAINER Marcel Huber "marcelhuberfoo@gmail.com"
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -11,11 +11,9 @@ RUN apt-get update \
     && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 ENV LANG en_US.utf8
 
-ENV GITIT_VERSION 0.10.0.1-1+b1
-
 ## install gitit
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends mime-support gitit=$GITIT_VERSION \
+    && apt-get install -y --no-install-recommends mime-support git gitit \
     && rm -rf /var/lib/apt/lists/*
 
 VOLUME ["/data"]

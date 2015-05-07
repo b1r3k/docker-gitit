@@ -7,14 +7,29 @@ A Dockerfile for the [Gitit Wiki](https://github.com/jgm/gitit). There is no def
 For a first installation (if you don't already use Gitit) :
 
 ```bash
-sudo docker run -d --name gitit -p 80:5001 hyzual/gitit
+sudo docker run -d --name gitit \
+                -e GIT_COMMITTER_NAME="User Name" \
+                -e GIT_COMMITTER_EMAIL="user@domain.com" \
+                -p 80:5001 \
+                marcelhuberfoo/gitit
 ```
+
+***It is important to pass in the committers name and email at least for the first commits of gitit!*** Otherwise the container will abort due to `git commit` errors. As soon as you created a user and logged in, the commit author is the user name.
+Default author name is **Gitit** and author email is empty but these do not force `git` to fail. If you like to set these values too, add them to the list of environment variables to pass in (exchange `COMMITTER` with `AUTHOR`).
+
 
 To use an existing Gitit wiki (assuming it's installed at /home/gitit/wiki), mount it as a volume :
 
 ```bash
-sudo docker run -d --name gitit -p 80:5001 -v /home/gitit/wiki:/data hyzual/gitit
+sudo docker run -d --name gitit \
+                -e GIT_COMMITTER_NAME="User Name" \
+                -e GIT_COMMITTER_EMAIL="user@domain.com" \
+                -p 80:5001 \
+                -v /home/gitit/wiki:/data \
+                marcelhuberfoo/gitit
 ```
+
+Instead of passing in the committer and user name as environment variables, set it in your `.git/config` administrative file from within the mounted directory. E.g. `git --git-dir=/home/gitit/wiki/wikidata/.git config user.name "Some User"` and `git --git-dir=/home/gitit/wiki/wikidata/.git config user.email "user@domain.com"` respectively. You can do it likewise for the author.
 
 ## Volumes
 
@@ -32,4 +47,6 @@ Gitit will also create the following when started :
 
 ### 5001
 
-Gitit webserver port
+Gitit default webserver port
+
+
