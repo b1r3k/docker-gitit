@@ -14,7 +14,8 @@ ENV LANG en_US.utf8
 ## install gitit
 RUN apt-get update \
     && apt-get install -y --no-install-recommends mime-support git gitit \
-    ghc graphviz texlive texlive-latex-extra \
+    ghc libghc-gitit-dev libghc-datetime-dev pandoc-data \
+    graphviz texlive texlive-latex-extra lmodern \
     && rm -rf /var/lib/apt/lists/*
 
 VOLUME ["/data"]
