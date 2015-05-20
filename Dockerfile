@@ -13,7 +13,7 @@ ENV LANG en_US.utf8
 
 ## install gitit
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends mime-support git gitit \
+    && apt-get install -y --no-install-recommends mime-support git gitit pandoc \
     && rm -rf /var/lib/apt/lists/*
 
 VOLUME ["/data"]
