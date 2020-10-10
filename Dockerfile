@@ -1,6 +1,20 @@
 ## Dockerfile for gitit
-FROM debian:jessie
-MAINTAINER Marcel Huber "marcelhuberfoo@gmail.com"
+FROM debian:buster as builder
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends mime-support git pbuilder build-essential ca-certificates
+
+RUN git clone http://github.com/jgm/gitit /tmp/gitit
+WORKDIR /tmp/gitit
+RUN wget http://deb.debian.org/debian/pool/main/g/gitit/gitit_0.12.3.1+dfsg-1.debian.tar.xz
+RUN tar xvf gitit_0.12.3.1+dfsg-1.debian.tar.xz
+RUN mk-build-deps
+RUN apt install ./gitit*.deb
+RUN pdebuild
+RUN ls
+
+FROM debian:buster-slim
+MAINTAINER Lukasz Jachym "lukasz.jachym <at> gmail <dot> com"
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -13,8 +27,10 @@ ENV LANG en_US.utf8
 
 ## install gitit
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends mime-support git gitit pandoc \
+    && apt-get install -y --no-install-recommends mime-support git pandoc \
     && rm -rf /var/lib/apt/lists/*
+
+RUN cabal update && cabal install gitit
 
 VOLUME ["/data"]
 
