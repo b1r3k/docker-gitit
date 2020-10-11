@@ -20,6 +20,7 @@ RUN sed -i 's/gitit (0.12.3.1+dfsg-1)/gitit (0.13.0.0+dfsg-1)/g' debian/changelo
 RUN /usr/bin/mk-build-deps
 RUN yes | apt install ./gitit*.deb
 RUN curl -s -L https://github.com/jgm/gitit/archive/0.13.0.0.tar.gz --output gitit_0.13.0.0+dfsg.orig.tar.gz
+RUN cp gitit_0.13.0.0+dfsg.orig.tar.gz ../
 RUN pdebuild
 RUN ls
 
