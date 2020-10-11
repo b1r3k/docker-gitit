@@ -1,6 +1,7 @@
 # docker-gitit
 
 A Dockerfile for the [Gitit Wiki](https://github.com/jgm/gitit). There is no default user, you can register directly in the wiki.
+It uses debian:unstable-slim in order to have latest gitit.
 
 ## Usage
 

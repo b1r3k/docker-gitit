@@ -1,6 +1,6 @@
 ## Dockerfile for gitit
-FROM debian:jessie
-MAINTAINER Marcel Huber "marcelhuberfoo@gmail.com"
+FROM debian:unstable-slim
+MAINTAINER Lukasz Jachym "lukasz.jachym <at> gmail <dot> com"
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -13,7 +13,7 @@ ENV LANG en_US.utf8
 
 ## install gitit
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends mime-support git gitit pandoc \
+    && apt-get install -y --no-install-recommends mime-support git pandoc gitit \
     && rm -rf /var/lib/apt/lists/*
 
 VOLUME ["/data"]
