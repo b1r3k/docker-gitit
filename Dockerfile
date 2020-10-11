@@ -16,10 +16,13 @@ RUN apt-get update \
     curl
 
 WORKDIR /tmp
+RUN echo 'deb-src http://deb.debian.org/debian/ buster main' >> /etc/apt/sources.list && apt update
 RUN apt source gitit/unstable
-RUN cd gitit* && mk-build-deps --install --remove
-RUN dch --bpo
-RUN dpkg-buildpackage -us -uc
+RUN apt source gitit/buster
+RUN cp gitit-0.12*/debian/control gitit-0.13*/debian/
+RUN cd gitit-0.13* && mk-build-deps --tool 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y' --install --remove
+RUN cd gitit* && dch --bpo
+RUN cd gitit* && dpkg-buildpackage -us -uc
 RUN ls -lau /tmp
 
 FROM debian:buster-slim
