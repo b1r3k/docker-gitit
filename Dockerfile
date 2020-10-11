@@ -1,6 +1,7 @@
 ## Dockerfile for gitit
 FROM debian:buster as builder
 
+RUN echo 'deb-src http://deb.debian.org/debian/ unstable main' >> /etc/apt/sources.list
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     mime-support \
@@ -10,26 +11,16 @@ RUN apt-get update \
     ca-certificates \
     devscripts \
     equivs \
+    packaging-dev \
+    debian-keyring \
     curl
 
-RUN mkdir /tmp/gitit
-WORKDIR /tmp/gitit
-RUN curl -s http://deb.debian.org/debian/pool/main/g/gitit/gitit_0.12.3.1+dfsg-1.debian.tar.xz --output gitit_0.12.3.1+dfsg-1.debian.tar.xz
-RUN tar xvf gitit_0.12.3.1+dfsg-1.debian.tar.xz
-RUN sed -i 's/gitit (0.12.3.1+dfsg-1)/gitit (0.13.0.0+dfsg-1)/g' debian/changelog
-RUN /usr/bin/mk-build-deps
-RUN yes | apt install ./gitit*.deb
-RUN curl -s -L https://github.com/jgm/gitit/archive/0.13.0.0.tar.gz --output /tmp/gitit_0.13.0.0+dfsg.orig.tar.gz
-# take patches from sid/gitit_0.13.0.0 package
-RUN curl -s http://deb.debian.org/debian/pool/main/g/gitit/gitit_0.13.0.0+dfsg-2.debian.tar.xz --output /tmp/gitit_0.13.0.0+dfsg-2.debian.tar.xz
-RUN tar xvf /tmp/gitit_0.13.0.0+dfsg-2.debian.tar.xz -C /tmp && rm debian/patches/* && cp /tmp/debian/patches/* debian/patches
-RUN rm gitit-build-deps_0.13.0.0+dfsg-1_all.deb gitit_0.12.3.1+dfsg-1.debian.tar.xz
-RUN apt-get install sudo -y
-#RUN useradd -G sudo -r builder
-#USER builder
-RUN pbuilder create
-RUN pdebuild
-RUN ls
+WORKDIR /tmp
+RUN apt source gitit/testing && cd gitit*
+RUN mk-build-deps --install --remove
+RUN dch --bpo
+RUN dpkg-buildpackage -us -uc
+RUN ls -lau /tmp
 
 FROM debian:buster-slim
 MAINTAINER Lukasz Jachym "lukasz.jachym <at> gmail <dot> com"
@@ -48,7 +39,8 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends mime-support git pandoc \
     && rm -rf /var/lib/apt/lists/*
 
-RUN cabal update && cabal install gitit
+COPY --from=builder /tmp/gitit_*_*.deb /tmp
+RUN yes | apt install /tmp/gitit_*_*.deb
 
 VOLUME ["/data"]
 
