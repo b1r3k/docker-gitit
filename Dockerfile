@@ -9,7 +9,7 @@ WORKDIR /tmp/gitit
 RUN wget http://deb.debian.org/debian/pool/main/g/gitit/gitit_0.12.3.1+dfsg-1.debian.tar.xz
 RUN tar xvf gitit_0.12.3.1+dfsg-1.debian.tar.xz
 RUN /usr/bin/mk-build-deps
-RUN apt install ./gitit*.deb
+RUN yes | apt install ./gitit*.deb
 RUN pdebuild
 RUN ls
 
