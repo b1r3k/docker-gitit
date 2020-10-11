@@ -19,8 +19,10 @@ RUN tar xvf gitit_0.12.3.1+dfsg-1.debian.tar.xz
 RUN sed -i 's/gitit (0.12.3.1+dfsg-1)/gitit (0.13.0.0+dfsg-1)/g' debian/changelog
 RUN /usr/bin/mk-build-deps
 RUN yes | apt install ./gitit*.deb
-RUN curl -s -L https://github.com/jgm/gitit/archive/0.13.0.0.tar.gz --output gitit_0.13.0.0+dfsg.orig.tar.gz
-RUN cp gitit_0.13.0.0+dfsg.orig.tar.gz ../
+RUN curl -s -L https://github.com/jgm/gitit/archive/0.13.0.0.tar.gz --output /tmp/gitit_0.13.0.0+dfsg.orig.tar.gz
+# take patches from sid/gitit_0.13.0.0 package
+RUN curl -s http://deb.debian.org/debian/pool/main/g/gitit/gitit_0.13.0.0+dfsg-2.debian.tar.xz --output /tmp/gitit_0.13.0.0+dfsg-2.debian.tar.xz
+RUN tar xvf /tmp/gitit_0.13.0.0+dfsg-2.debian.tar.xz -C /tmp && rm debian/patches/* && cp /tmp/debian/patches/* debian/patches
 RUN pdebuild
 RUN ls
 
