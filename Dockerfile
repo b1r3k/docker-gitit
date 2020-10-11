@@ -16,8 +16,8 @@ RUN apt-get update \
     curl
 
 WORKDIR /tmp
-RUN apt source gitit/unstable && cd gitit*
-RUN mk-build-deps --install --remove
+RUN apt source gitit/unstable
+RUN cd gitit* && mk-build-deps --install --remove
 RUN dch --bpo
 RUN dpkg-buildpackage -us -uc
 RUN ls -lau /tmp
