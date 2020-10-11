@@ -23,6 +23,11 @@ RUN curl -s -L https://github.com/jgm/gitit/archive/0.13.0.0.tar.gz --output /tm
 # take patches from sid/gitit_0.13.0.0 package
 RUN curl -s http://deb.debian.org/debian/pool/main/g/gitit/gitit_0.13.0.0+dfsg-2.debian.tar.xz --output /tmp/gitit_0.13.0.0+dfsg-2.debian.tar.xz
 RUN tar xvf /tmp/gitit_0.13.0.0+dfsg-2.debian.tar.xz -C /tmp && rm debian/patches/* && cp /tmp/debian/patches/* debian/patches
+RUN rm gitit-build-deps_0.13.0.0+dfsg-1_all.deb gitit_0.12.3.1+dfsg-1.debian.tar.xz
+RUN apt-get install sudo -y
+#RUN useradd -G sudo -r builder
+#USER builder
+RUN pbuilder create
 RUN pdebuild
 RUN ls
 
