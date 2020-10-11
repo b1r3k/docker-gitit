@@ -21,8 +21,9 @@ RUN apt source gitit/unstable
 RUN apt source gitit/buster
 RUN cp gitit-0.12*/debian/control gitit-0.13*/debian/
 RUN cd gitit-0.13* && mk-build-deps --tool 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y' --install --remove
-RUN cd gitit* && dch --bpo
-RUN cd gitit* && dpkg-buildpackage -us -uc
+RUN apt-get install -y --no-install-recommends vim
+RUN cd gitit-0.13* && dch --bpo "backports gitit from unstable to buster"
+RUN cd gitit-0.13* && dpkg-buildpackage -us -uc
 RUN ls -lau /tmp
 
 FROM debian:buster-slim
